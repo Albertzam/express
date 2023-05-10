@@ -1,0 +1,4 @@
+export const STATUS_DB = {
+  ACTIVE: 'ACTIVE',
+  ELIMINATED: 'ELIMINATED',
+}

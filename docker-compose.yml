@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  nextia-api:
+    container_name: api-nextia
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '4002:4002'
+    networks:
+      - nextia-network
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      NODE_ENV: production
+      SECRET_JWT: nextiaProduction
+      PORT: 4002
+      MONGO_URL: mongodb://user_dev:e35GFStKhwK@mongo:27017/nextia
+      REDIS_URL: redis://user_dev:e35GFStKhwK@redis:6379
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.4.0-rc7-bionic
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user_dev
+      - MONGO_INITDB_ROOT_PASSWORD=e35GFStKhwK
+      - MONGO_INITDB_DATABASE=nextia
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - /home/developer/nextia/data:/data/db
+    networks:
+      - nextia-network
+    command: mongod --logpath=/dev/null
+    ports:
+      - '27017:27017'
+
+  redis:
+    container_name: redis-nextia
+    image: redis:alpine
+    networks:
+      - nextia-network
+    command: redis-server --appendonly yes --requirepass e35GFStKhwK
+    ports:
+      - '6379:6379'
+
+networks:
+  nextia-network:
+    driver: bridge
