@@ -14,18 +14,18 @@ services:
       - redis
     environment:
       NODE_ENV: production
-      SECRET_JWT: nextiaProduction
+      SECRET_JWT: ${SECRET_JWT_PRODUCTION}
       PORT: 4002
-      MONGO_URL: mongodb://user_dev:e35GFStKhwK@mongo:27017/nextia
-      REDIS_URL: redis://user_dev:e35GFStKhwK@redis:6379
+      MONGO_URL: ${MONGO_URL_PRODUCTION}
+      REDIS_URL: ${REDIS_URL_PRODUCTION}
 
   mongo:
     container_name: mongo
     image: mongo:4.4.0-rc7-bionic
     restart: always
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=user_dev
-      - MONGO_INITDB_ROOT_PASSWORD=e35GFStKhwK
+      - MONGO_INITDB_ROOT_USERNAME=${USER_NAME_DB}
+      - MONGO_INITDB_ROOT_PASSWORD=${PASSWORD_DB}
       - MONGO_INITDB_DATABASE=nextia
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
@@ -43,7 +43,7 @@ services:
     image: redis:alpine
     networks:
       - nextia-network
-    command: redis-server --appendonly yes --requirepass e35GFStKhwK
+    command: redis-server --appendonly yes --requirepass ${PASSWORD_DB}
     ports:
       - '6379:6379'
 
