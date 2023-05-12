@@ -30,7 +30,7 @@ class UserService {
 
       .lean()
       .exec()
-    console.log(user.password)
+
     if (!exist)
       throw new HttpException('User not found', ErrorCodesApi.USER_NOT_FOUND)
     else if (!(await bcrypt.compare(user.password, exist.password)))
