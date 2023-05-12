@@ -7,7 +7,6 @@ import {
   EMAIL_JWT,
   HttpStatus,
   ID_GENERAL,
-  LOGIN_USER,
   REGISTER_PRODUCT,
   RESPONSE_PRODUCT,
   ROLES_USERS,
@@ -23,7 +22,7 @@ import {
 import * as jwt from 'jsonwebtoken'
 import helmet from 'helmet'
 
-describe('User api test', () => {
+describe('Product api test', () => {
   let appExpress: Express
   let appListen: http.Server
   let requestTest: RequestTest
@@ -248,7 +247,7 @@ describe('User api test', () => {
     describe('Find all product', () => {
       it('should find all product ', async () => {
         await requestTest
-          .getUnAuthorizedCall('/product/find-all', LOGIN_USER)
+          .getUnAuthorizedCall('/product/find-all')
           .expect(200)
           .expect([RESPONSE_PRODUCT])
       })
