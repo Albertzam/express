@@ -2,7 +2,7 @@ import { DTO } from '../common'
 import { STATUS_DB } from '../common/constants/status.db'
 import { HttpException } from '../middlewares'
 import { ErrorCodesApi } from '../middlewares/errors/error.constants'
-import { ProductDocument, ProductModule, UserModel } from '../schemas'
+import { ProductDocument, ProductModule } from '../schemas'
 
 class ProductService {
   async register(data: DTO.ProductRegister): Promise<ProductDocument> {
@@ -31,9 +31,13 @@ class ProductService {
         'Product not found',
         ErrorCodesApi.PRODUCT_NOT_FOUND
       )
-    const productUpdated = await ProductModule.findByIdAndUpdate(data._id, {
-      ...data,
-    }).lean()
+    const productUpdated = await ProductModule.findByIdAndUpdate(
+      data._id,
+      {
+        ...data,
+      },
+      { new: true }
+    ).lean()
     return productUpdated as ProductDocument
   }
 
@@ -51,14 +55,21 @@ class ProductService {
         ErrorCodesApi.PRODUCT_ALREADY_DELETED
       )
 
-    await UserModel.findByIdAndUpdate(data._id, {
-      status: STATUS_DB.ELIMINATED,
-    })
+    await ProductModule.findByIdAndUpdate(
+      data._id,
+      {
+        status: STATUS_DB.ELIMINATED,
+      },
+      { new: true }
+    )
     return data
   }
 
   async findOne(data: DTO.DeleteGeneral): Promise<ProductDocument> {
-    const exist = await ProductModule.findById(data._id).exec()
+    const exist = await ProductModule.findOne({
+      _id: data._id,
+      status: STATUS_DB.ACTIVE,
+    }).exec()
 
     if (!exist)
       throw new HttpException(

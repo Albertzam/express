@@ -6,6 +6,10 @@ export class ConfigEnv {
   NODE_ENV: string
 
   @IsNotEmpty()
+  @IsString()
+  SECRET_JWT: string
+
+  @IsNotEmpty()
   @Transform(({ value }) => Number(value))
   @IsNumber()
   PORT: number

@@ -1,10 +1,12 @@
 import {
   IsEmail,
+  IsEnum,
   IsMongoId,
   IsNotEmpty,
   IsString,
   MinLength,
 } from 'class-validator'
+import { ROLES_USERS } from '../../constants/roles.constants'
 
 export class UserUpdate {
   @IsNotEmpty()
@@ -25,6 +27,6 @@ export class UserUpdate {
   password: string
 
   @IsNotEmpty()
-  @IsString({ each: true })
+  @IsEnum(ROLES_USERS, { each: true })
   roles: Array<string>
 }

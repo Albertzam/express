@@ -15,6 +15,7 @@ export const logger = createLogger({
           },
         })
       ),
+      silent: process.env.NODE_ENV === 'test',
     }),
   ],
 })

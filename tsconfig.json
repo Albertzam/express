@@ -11,5 +11,6 @@
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
-  }
+  },
+  "exclude": ["__test__/**/*"]
 }

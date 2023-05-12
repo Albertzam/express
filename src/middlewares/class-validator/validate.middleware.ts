@@ -6,7 +6,9 @@ export const ValidateMiddleware = (dtoClass: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const dtoInstance = Object.assign(
       new dtoClass(),
-      req.method.toLowerCase() == 'get' ? req.query : req.body
+      req.method.toLowerCase() == 'get' || req.method.toLowerCase() == 'delete'
+        ? req.query
+        : req.body
     )
 
     const errores = await validate(dtoInstance)

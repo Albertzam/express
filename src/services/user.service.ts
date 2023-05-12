@@ -2,7 +2,7 @@ import { DTO } from '../common'
 import { STATUS_DB } from '../common/constants/status.db'
 import { HttpException } from '../middlewares'
 import { ErrorCodesApi } from '../middlewares/errors/error.constants'
-import { UserDocument, UserModel } from '../schemas'
+import { UserModel } from '../schemas'
 import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
 class UserService {
@@ -15,7 +15,7 @@ class UserService {
     return { ...user, token: this.getAccessToken(user), password: undefined }
   }
 
-  getAccessToken(payload: any): string {
+  private getAccessToken(payload: any): string {
     const accessToken = jwt.sign(payload, process.env.SECRET_JWT as string, {
       expiresIn: '12h',
     })
@@ -23,7 +23,10 @@ class UserService {
   }
 
   async login(user: DTO.UserLogin): Promise<DTO.UserResponse> {
-    const exist = await UserModel.findOne({ email: user.email })
+    const exist = await UserModel.findOne({
+      email: user.email,
+      status: STATUS_DB.ACTIVE,
+    })
       .select(['-password'])
       .lean()
       .exec()

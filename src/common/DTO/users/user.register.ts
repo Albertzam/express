@@ -1,4 +1,11 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator'
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+} from 'class-validator'
+import { ROLES_USERS } from '../../constants/roles.constants'
 
 export class UserRegister {
   @IsNotEmpty()
@@ -15,6 +22,6 @@ export class UserRegister {
   password: string
 
   @IsNotEmpty()
-  @IsString({ each: true })
+  @IsEnum(ROLES_USERS, { each: true })
   roles: Array<string>
 }

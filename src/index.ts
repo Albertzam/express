@@ -31,8 +31,9 @@ const bootstrap = async () => {
   )
 
   await db.connect()
+  const isRedisConnected = await redisClient.ping()
 
-  if (db.getConnection()) {
+  if (db.getConnection() || isRedisConnected == 'PONG') {
     appExpress.listen(process.env.PORT, () => {
       logger.info(
         `${process.pid} Express is listening on http://localhost:${process.env.PORT}`

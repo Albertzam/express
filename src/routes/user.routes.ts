@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { DTO } from '../common'
+import { DTO, ROLES_USERS } from '../common'
 import { AuthMiddleware, ValidateMiddleware } from '../middlewares'
 import {
   deleteUserController,
@@ -9,6 +9,7 @@ import {
 } from '../controllers'
 
 const router = Router()
+
 router.post(
   '/register',
   ValidateMiddleware(DTO.UserRegister),
@@ -17,14 +18,14 @@ router.post(
 
 router.put(
   '/update',
-  AuthMiddleware('ADMIN'),
+  AuthMiddleware(ROLES_USERS.ADMIN),
   ValidateMiddleware(DTO.UserUpdate),
   updateUserController
 )
 
 router.delete(
   '/delete',
-  AuthMiddleware('ADMIN'),
+  AuthMiddleware(ROLES_USERS.ADMIN),
   ValidateMiddleware(DTO.DeleteGeneral),
   deleteUserController
 )
