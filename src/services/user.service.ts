@@ -27,15 +27,20 @@ class UserService {
       email: user.email,
       status: STATUS_DB.ACTIVE,
     })
-      .select(['-password'])
+
       .lean()
       .exec()
-
+    console.log(user.password)
     if (!exist)
       throw new HttpException('User not found', ErrorCodesApi.USER_NOT_FOUND)
-
+    else if (!(await bcrypt.compare(user.password, exist.password)))
+      throw new HttpException(
+        'Password is error',
+        ErrorCodesApi.USER_ERROR_VALUES
+      )
     return {
       ...exist,
+      password: undefined,
       token: this.getAccessToken(exist),
     }
   }

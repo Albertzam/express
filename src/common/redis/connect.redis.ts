@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import 'dotenv/config'
-import IORedis, { Redis } from 'ioredis'
+import IORedis from 'ioredis'
 import { logger } from '../../logger/logger'
 
 export const url = new URL(process.env.REDIS_URL as string)
